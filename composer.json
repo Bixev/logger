@@ -1,5 +1,5 @@
 {
-  "name": "bixev/logger",
+  "name": "bixev/light-logger",
   "description": "Bixev logger",
   "license": "MIT",
   "require": {
