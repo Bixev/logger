@@ -19,11 +19,12 @@ trait LoggerTrait
 
     /**
      * @param mixed $log
+     * @param string $level @see \Bixev\LightLogger\LoggerLevel::LEVEL_ ...
      */
-    protected function log($log)
+    protected function log($log, $level = null)
     {
         if ($this->_logger !== null) {
-            $this->_logger->log($log);
+            $this->_logger->log($log, $level);
         }
     }
 
