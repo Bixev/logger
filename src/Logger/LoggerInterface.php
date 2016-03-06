@@ -1,6 +1,6 @@
 <?php
 
-namespace Bixev\Logger;
+namespace Bixev\LightLogger;
 
 interface LoggerInterface
 {

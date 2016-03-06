@@ -1,18 +1,18 @@
 <?php
-namespace Bixev\Logger;
+namespace Bixev\LightLogger;
 
 trait LoggerTrait
 {
 
     /**
-     * @var \Bixev\InterventionSdk\Logger\LoggerInterface
+     * @var \Bixev\LightLogger\LoggerInterface
      */
     protected $_logger;
 
     /**
-     * @param \Bixev\InterventionSdk\Logger\LoggerInterface $logger
+     * @param \Bixev\LightLogger\LoggerInterface $logger
      */
-    public function setLogger(\Bixev\InterventionSdk\Logger\LoggerInterface $logger = null)
+    public function setLogger(\Bixev\LightLogger\LoggerInterface $logger = null)
     {
         $this->_logger = $logger;
     }
