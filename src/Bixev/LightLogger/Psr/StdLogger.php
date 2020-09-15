@@ -2,19 +2,32 @@
 
 namespace Bixev\LightLogger\Psr;
 
+use Bixev\LightLogger\LoggerLevel;
+
 class StdLogger implements \Psr\Log\LoggerInterface
 {
+
+    protected $_customCallback;
+
+    /**
+     * @param callable|null $customCallback callable($level, $message)
+     */
+    public function __construct(callable $customCallback = null)
+    {
+        $this->_customCallback = $customCallback;
+    }
+
     /**
      * System is unusable.
      *
      * @param string $message
-     * @param array $context
+     * @param array  $context
      *
      * @return void
      */
-    public function emergency($message, array $context = array())
+    public function emergency($message, array $context = [])
     {
-        firelog($message);
+        $this->customLog(LoggerLevel::LEVEL_EMERGENCY, $message);
     }
 
     /**
@@ -24,13 +37,13 @@ class StdLogger implements \Psr\Log\LoggerInterface
      * trigger the SMS alerts and wake you up.
      *
      * @param string $message
-     * @param array $context
+     * @param array  $context
      *
      * @return void
      */
-    public function alert($message, array $context = array())
+    public function alert($message, array $context = [])
     {
-        firelog($message);
+        $this->customLog(LoggerLevel::LEVEL_ALERT, $message);
     }
 
     /**
@@ -39,13 +52,13 @@ class StdLogger implements \Psr\Log\LoggerInterface
      * Example: Application component unavailable, unexpected exception.
      *
      * @param string $message
-     * @param array $context
+     * @param array  $context
      *
      * @return void
      */
-    public function critical($message, array $context = array())
+    public function critical($message, array $context = [])
     {
-        firelog($message);
+        $this->customLog(LoggerLevel::LEVEL_CRITICAL, $message);
     }
 
     /**
@@ -53,13 +66,13 @@ class StdLogger implements \Psr\Log\LoggerInterface
      * be logged and monitored.
      *
      * @param string $message
-     * @param array $context
+     * @param array  $context
      *
      * @return void
      */
-    public function error($message, array $context = array())
+    public function error($message, array $context = [])
     {
-        firelog($message);
+        $this->customLog(LoggerLevel::LEVEL_ERROR, $message);
     }
 
     /**
@@ -69,26 +82,26 @@ class StdLogger implements \Psr\Log\LoggerInterface
      * that are not necessarily wrong.
      *
      * @param string $message
-     * @param array $context
+     * @param array  $context
      *
      * @return void
      */
-    public function warning($message, array $context = array())
+    public function warning($message, array $context = [])
     {
-        firelog($message);
+        $this->customLog(LoggerLevel::LEVEL_WARN, $message);
     }
 
     /**
      * Normal but significant events.
      *
      * @param string $message
-     * @param array $context
+     * @param array  $context
      *
      * @return void
      */
-    public function notice($message, array $context = array())
+    public function notice($message, array $context = [])
     {
-        firelog($message);
+        $this->customLog(LoggerLevel::LEVEL_NOTICE, $message);
     }
 
     /**
@@ -97,39 +110,48 @@ class StdLogger implements \Psr\Log\LoggerInterface
      * Example: User logs in, SQL logs.
      *
      * @param string $message
-     * @param array $context
+     * @param array  $context
      *
      * @return void
      */
-    public function info($message, array $context = array())
+    public function info($message, array $context = [])
     {
-        firelog($message);
+        $this->customLog(LoggerLevel::LEVEL_INFO, $message);
     }
 
     /**
      * Detailed debug information.
      *
      * @param string $message
-     * @param array $context
+     * @param array  $context
      *
      * @return void
      */
-    public function debug($message, array $context = array())
+    public function debug($message, array $context = [])
     {
-        firelog($message);
+        $this->customLog(LoggerLevel::LEVEL_DEBUG, $message);
     }
 
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed $level
+     * @param mixed  $level
      * @param string $message
-     * @param array $context
+     * @param array  $context
      *
      * @return void
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
-        firelog($message);
+        $this->customLog($level, $message);
+    }
+
+    protected function customLog(string $level, string $message, array $context = [])
+    {
+        if ($this->_customCallback !== null) {
+            ($this->_customCallback)($level, $message);
+        } else {
+            firelog($level . ': ' . $message);
+        }
     }
 }
